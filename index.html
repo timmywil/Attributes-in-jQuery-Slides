@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!--
+  Rare Javascript Operators
+  by Timmy Willison
+  WTFPL License
+  If you want the cool kid fonts for this preso:
+  http://new.myfonts.com/fonts/hiekkagraphics/sketchetik/
+  http://www.microsoft.com/downloads/en/details.aspx?familyid=22e69ae4-7e40-4807-8a86-b3d36fab68d3&displaylang=en
+  They aren't licensed for webfonting, so sry.
+  This all refers to the Presentation slides or whatever.
+  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+  Copyright 2010 Google Inc.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                Alex Russell (slightlyoff@chromium.org)
+                Brad Neuberg
+-->
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset='utf-8' />
+  <meta content='IE=Edge;chrome=1' http-equiv='X-UA-Compatible' />
+  <meta content='timmy willison personal website' name='description' />
+  <meta content='timmy willison' name='author' />
+  <title>Attributes in jQuery | by timmmy willison</title>
+  <link href='css/main.css' rel='stylesheet' type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono' rel='stylesheet' type='text/css' />
+  <script src='js/modernizr-shim.min.js'></script>
+</head>
+<body>
+  <div class='presentation'>
+    <div id='presentation-counter'></div>
+    <div class='slides'>
+      <!-- Title -->
+      <div class='slide' id='landing'>
+        <section class='middle landing'>
+          <h1>Attributes in jQuery</h1>
+          <h4>by Timmy Willison</h4>
+        </section>
+      </div>
+      <!-- Who I Am -->
+      <div class='slide' id='about-me'>
+        <header>
+          <h1>Who the...</h1>
+        </header>
+        <section>
+          <ul>
+            <li>jQuery Core Team (Committer/Bug Triage)</li>
+            <li>jQuery 1.6 and the <code>.attr()</code> rewrite</li>
+            <li>Web Developer at Medium</li>
+            <li>I'm in your code, messing with your attributes.</li>
+          </ul>
+        </section>
+      </div>
+      <!-- What Changed -->
+      <div class='slide' id='what-changed'>
+        <header>
+          <h1>WAT changed in jQuery 1.6?</h1>
+        </header>
+        <section>
+          <ul>
+            <li>Rewrite of <code>.attr()</code> and the addition of the <code>.prop()</code>/<code>.removeProp()</code> methods</li>
+            <li>Significant performance improvements in <code>.attr()</code>, <code>.val()</code>, and Event triggering</li>
+            <li>attrHooks, valHooks, propHooks, requestAnimationFrame animations, more deferred functions, relative css</li>
+          </ul>
+        </section>
+      </div>
+      <!-- What was the confusion? -->
+      <div class='slide' id='confusion'>
+        <header>
+          <h1>I haz propribute?</h1>
+        </header>
+        <section>
+          <ul>
+            <li><code>.attr()</code> has handled both attributes and properties in the same method since 1.0</li>
+            <li><code>.attr()</code> had many bugs and was a slow, jumbled mess that was hard to maintain.</li>
+            <li>Therefore, a fundamental concept in javascript was lost on developers who only use jQuery.</li>
+          </ul>
+        </section>
+      </div>
+      <!-- Difference between attributes and properties -->
+      <div class='slide' id='difference'>
+        <header>
+          <h1>So, what's the difference?</h1>
+        </header>
+        <section class='center'>
+          <br />
+          <pre class='brush:js;toolbar:false'>&lt;input class="foo"&gt; // attribute&#x000A;$('input')[0].className // property</pre>
+          <br />
+          <pre class='brush:js;toolbar:false'>&lt;input id="bar"&gt; // attribute&#x000A;$('#bar')[0].id // property</pre>
+          <blockquote>Attributes are in the html, parsed by the browser to form the DOM, and (generally) correspond to properties.</blockquote>
+        </section>
+      </div>
+      <!-- Facepalm -->
+      <div class='slide' id='facepalm'>
+        <header>
+          <h1>/facepalm</h1>
+        </header>
+        <section>
+          <p>These don't make sense in the world of attributes.</p>
+          <br />
+          <pre class='brush:js;toolbar:false'>$(window).attr...&#x000A;$(document).attr...&#x000A;$("input").attr("selectedIndex");&#x000A;$("#foo").attr("nodeName");&#x000A;$("#bar").attr("tagName");&#x000A;$("&lt;input&gt;").attr("type");&#x000A;&#x000A;</pre>
+        </section>
+      </div>
+      <!-- Boolean attributes -->
+      <div class='slide' id='boolean'>
+        <header>
+          <h1>Boolean Attributes and Properties</h1>
+        </header>
+        <section>
+          <p>The spark of discussion, these are special. According to the <a href="http://www.w3.org/TR/html4/interact/forms.html#adef-value-INPUT">spec</a>, attributes such as checked do not map to properties of the same name.</p>
+          <br />
+          <pre class='brush:js;toolbar:false'>&lt;input type="checkbox" checked="checked"&gt;&#x000A;// Maps to .defaultChecked (initial value)</pre>
+          <br />
+          <pre class='brush:js;toolbar:false'>$('input').attr('checked', true);&#x000A;// Didn't set the checked property in 1.6&#x000A;&#x000A;</pre>
+        </section>
+      </div>
+      <!-- Boolean attributes example -->
+      <div class='slide' id='boolean-example'>
+        <header>
+          <h1><code>example === true</code></h1>
+        </header>
+        <section class='middle'>
+          <iframe style="width: 100%; height: 400px" src="http://jsfiddle.net/timmywil/ZJRzs/embedded/"></iframe>
+        </section>
+      </div>
+      <!-- 1.6.1 -->
+      <div class='slide' id='jQuery_161'>
+        <header>
+          <h1>1.6.1 fixes compatibility</h1>
+        </header>
+        <section>
+          <ul class='smaller'>
+            <li>Changing boolean attributes with <code>.attr()</code> changes the property</li>
+            <li><code>.attr()</code> can be used on the window/document (just defers to <code>.prop()</code>)</li>
+            <li>In these cases, it is better to use <code>.prop()</code> since <code>.attr()</code> will simply call <code>.prop()</code> for you.</li>
+            <li><strong>Note:</strong> Node properties such as selectedIndex, nodeName, tagName, and defaultValue are no longer retrievable with <code>.attr()</code>, but can now be retrieved with <code>.prop()</code>.</li>
+          </ul>
+        </section>
+      </div>
+      <!-- .attr("value") -->
+      <div class='slide' id='value'>
+        <header>
+          <h1><code>.attr("value")</code></h1>
+        </header>
+        <section>
+          <br />
+          <h2><code>value</code> should never be retrieved with <code>.attr()</code>. OK, except for buttons. Setting makes sense in certain circumstances (e.g. creating new elements).</h2>
+          <br />
+          <h3>The <code>.prop()</code> method may be useful in setting on a jQuery object of multiple elements that need the same value, but so is <code>.val()</code>.</h3>
+          <br />
+          <h3>The <code>.val()</code> method handles all the weirdness that comes with the value property, and it handles retrieving value for more elements across browsers.  It is <i>preferred</i>.</h3>
+        </section>
+      </div>
+      <!-- Preferred Usage -->
+      <div class='slide' id='preferred-usage'>
+        <header>
+          <h1>
+            <a href='http://blog.jquery.com/2011/05/12/jquery-1-6-1-released/'>Preferred Usage</a>
+          </h1>
+        </header>
+        <section>
+          <blockquote>
+            "The .prop() method should be used for boolean attributes/properties and for properties which do not exist in html (such as window.location). All other attributes (ones you can see in the html) can and should continue to be manipulated with the .attr() method."
+            <br />
+            - jQuery blog
+          </blockquote>
+        </section>
+      </div>
+      <!-- Preview -->
+      <div class='slide' id='preview'>
+        <header>
+          <h1>Coming Up in jQuery 1.7</h1>
+        </header>
+        <section class='middle'>
+          <ul style='text-align:left'>
+            <li>jQuery.Callbacks (opens the door for pub/sub)</li>
+            <li>Super-awesome animation toggling (<a target="_blank" href="http://jsfiddle.net/timmywil/gqZL5/24/">example</a>)</li>
+            <li>HTML5 element tag support (shim, innerHTML, and cloning)</li>
+          </ul>
+          <p style='line-height:1.2em;margin: 60px 0 0 50px;'>*Upgrade to 1.6.2 when it comes out! <br>Several bug fixes and ultra-solid.</p>
+        </section>
+      </div>
+      <!-- Thanks -->
+      <div class='slide' id='thanks'>
+        <section class='middle'>
+          <h1>Thanks!</h1>
+          <ul class='none'>
+            <li><a href="http://twitter.com/#!/timmywil">@timmywil (Also in the #jquery irc)</a></li>
+            <li><a href="http://github.com/timmywil">Github</a></li>
+            <li>jQuery <3 community. <a href="http://docs.jquery.com/Getting_Involved">Getting Involved</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </div>
+  <!-- presentation -->
+  <script charset='utf-8' src='js/slides.js' type='text/javascript'></script>
+  <!--[if lt IE 9]>
+    <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+    <script>CFInstall.check({ mode: "overlay" });</script>
+  <![endif]-->
+  <script charset='utf-8' src='js/syntax_highlighter.js' type='text/javascript'></script>
+  <script type='text/javascript'>
+    //<![CDATA[
+      (function(){
+      	var corecss = document.createElement('link');
+      	var themecss = document.createElement('link');
+      })();
+      SyntaxHighlighter.config.clipboardSwf = 'img/clipboard.swf';
+      SyntaxHighlighter.config.strings.expandSource = 'show source';
+      SyntaxHighlighter.config.strings.viewSource = 'view source';
+      SyntaxHighlighter.config.strings.copyToClipboard = 'copy to clipboard';
+      SyntaxHighlighter.config.strings.copyToClipboardConfirmation = 'The code is in your clipboard now';
+      SyntaxHighlighter.config.strings.print = 'print';
+      SyntaxHighlighter.config.strings.help = '?';
+      SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+      SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+      SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+      SyntaxHighlighter.defaults['tab-size'] = 2;
+      SyntaxHighlighter.all();
+    //]]>
+  </script>
+  <!-- asynchronous google analytics -->
+  <script type='text/javascript'>
+    //<![CDATA[
+      var _gaq = [['_setAccount', 'UA-15918109-1'], ['_trackPageview']];
+      (function(d, t) {
+       var g = d.createElement(t),
+      		 s = d.getElementsByTagName(t)[0];
+       g.async = true;
+       g.src = ('https:' == location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       s.parentNode.insertBefore(g, s);
+      })(document, 'script');
+    //]]>
+  </script>
+  
+</body>
+</html>
