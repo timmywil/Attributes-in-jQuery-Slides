@@ -59,7 +59,7 @@
           <ul>
             <li>jQuery Core Team (Committer/Bug Triage)</li>
             <li>jQuery 1.6 and the <code>.attr()</code> rewrite</li>
-            <li>Web Developer at Medium</li>
+            <li>Recently joined a new creative team at EPB</li>
             <li>I'm in your code, messing with your attributes.</li>
           </ul>
         </section>
@@ -85,8 +85,8 @@
         <section>
           <ul>
             <li><code>.attr()</code> has handled both attributes and properties in the same method since 1.0</li>
-            <li><code>.attr()</code> had many bugs and was a slow, jumbled mess that was hard to maintain.</li>
-            <li>Therefore, a fundamental concept in javascript was lost on developers who only use jQuery.</li>
+            <li><code>.attr()</code> had several bugs and was hard to maintain.</li>
+            <li>Therefore, a fundamental concept in javascript was lost on some developers who only use jQuery.</li>
           </ul>
         </section>
       </div>
@@ -121,10 +121,10 @@
         </header>
         <section>
           <p>The spark of discussion, these are special. According to the <a href="http://www.w3.org/TR/html4/interact/forms.html#adef-value-INPUT">spec</a>, attributes such as checked do not map to properties of the same name.</p>
-          <br />
+          <i>The most common boolean attributes are checked, selected, readOnly, and disabled</i>
           <pre class='brush:js;toolbar:false'>&lt;input type="checkbox" checked="checked"&gt;&#x000A;// Maps to .defaultChecked (initial value)</pre>
-          <br />
-          <pre class='brush:js;toolbar:false'>$('input').attr('checked', true);&#x000A;// Didn't set the checked property in 1.6&#x000A;&#x000A;</pre>
+          <pre class='brush:js;toolbar:false'>$('input').attr('checked', true);&#x000A;// Didn't set the checked property in 1.6</pre>
+          <pre class='brush:js;toolbar:false'>// Do this instead&#x000A;$('input').prop('checked', true);&#x000A;$('input').prop('checked', false);&#x000A;&#x000A;</pre>
         </section>
       </div>
       <!-- Boolean attributes example -->
@@ -132,8 +132,9 @@
         <header>
           <h1><code>example === true</code></h1>
         </header>
-        <section class='middle'>
-          <iframe style="width: 100%; height: 400px" src="http://jsfiddle.net/timmywil/ZJRzs/embedded/"></iframe>
+        <section>
+          <p>jQuery is not being used to set the checkbox here.  This is to show that the native behavior of a checkbox as it is changed by the user does not keep the attribute up to date with the current value, just the property.</p>
+          <iframe style="width: 100%; height: 300px" src="http://jsfiddle.net/timmywil/ZJRzs/3/embedded/result,js,html"></iframe>
         </section>
       </div>
       <!-- 1.6.1 -->
@@ -155,11 +156,8 @@
         <header>
           <h1><code>.attr("value")</code></h1>
         </header>
-        <section>
-          <br />
+        <section class='middle'>
           <h2><code>value</code> should never be retrieved with <code>.attr()</code>. OK, except for buttons. Setting makes sense in certain circumstances (e.g. creating new elements).</h2>
-          <br />
-          <h3>The <code>.prop()</code> method may be useful in setting on a jQuery object of multiple elements that need the same value, but so is <code>.val()</code>.</h3>
           <br />
           <h3>The <code>.val()</code> method handles all the weirdness that comes with the value property, and it handles retrieving value for more elements across browsers.  It is <i>preferred</i>.</h3>
         </section>
@@ -168,7 +166,7 @@
       <div class='slide' id='preferred-usage'>
         <header>
           <h1>
-            <a href='http://blog.jquery.com/2011/05/12/jquery-1-6-1-released/'>Preferred Usage</a>
+            <a href='http://blog.jquery.com/2011/05/12/jquery-1-6-1-released/' target='_blank'>Preferred Usage (more info here)</a>
           </h1>
         </header>
         <section>
@@ -185,12 +183,12 @@
           <h1>Coming Up in jQuery 1.7</h1>
         </header>
         <section class='middle'>
-          <ul style='text-align:left'>
+          <ul>
             <li>jQuery.Callbacks (opens the door for pub/sub)</li>
             <li>Super-awesome animation toggling (<a target="_blank" href="http://jsfiddle.net/timmywil/gqZL5/24/">example</a>)</li>
             <li>HTML5 element tag support (shim, innerHTML, and cloning)</li>
           </ul>
-          <p style='line-height:1.2em;margin: 60px 0 0 50px;'>*Upgrade to 1.6.2 when it comes out! <br>Several bug fixes and ultra-solid.</p>
+          <p class='down'>*Upgrade to 1.6.2 when it comes out! <br>Several bug fixes and ultra-solid.</p>
         </section>
       </div>
       <!-- Thanks -->

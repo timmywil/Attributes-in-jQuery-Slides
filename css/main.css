@@ -163,6 +163,18 @@ section.middle {
     width: 900px;
 }
 
+section.middle p, section.middle h3 {
+    line-height: 1.2em;
+}
+
+section.middle ul:not(.none) li {
+    text-align: left;
+}
+
+section.middle p.down {
+    margin: 60px 0 0 50px;
+}
+
 section.lower {
     margin-top: 150px;
 }
@@ -303,6 +315,10 @@ button.large {
 
 .slide p, .slide textarea {
     font-size: 26px;
+}
+
+.slide i {
+    font-size: .8em;
 }
 
 .slide .counter {
